@@ -22,7 +22,14 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IMeetupService, MeetupService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddAutoMapper(cfg =>
+{
+    var licenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+    if (!string.IsNullOrWhiteSpace(licenseKey))
+    {
+        cfg.LicenseKey = licenseKey;
+    }
+}, typeof(AutoMapperProfile));
 
 builder.Services.AddRouting(options
     => options.LowercaseUrls = true);
