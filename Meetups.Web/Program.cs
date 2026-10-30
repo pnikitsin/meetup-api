@@ -5,6 +5,8 @@ using Meetups.Domain.Interfaces;
 using Meetups.Infrastructure.Data;
 using Meetups.Web.Extensions;
 using Meetups.Web.Middleware;
+using Meetups.Web.OpenApi;
+using Scalar.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,15 +28,19 @@ builder.Services.AddRouting(options
     => options.LowercaseUrls = true);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerUI();
+builder.Services.AddOpenApi(options =>
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference(options => options
+        .WithTitle("Meetup API")
+        .WithTheme(ScalarTheme.Moon)
+        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
+        .DisableAgent());
 }
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
