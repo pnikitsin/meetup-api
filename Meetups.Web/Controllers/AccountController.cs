@@ -24,11 +24,11 @@ namespace Meetups.Web.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginAccountDto loginAccountDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<LoginResultDto>> Login(LoginAccountDto loginAccountDto, CancellationToken cancellationToken)
         {
-            var token = await _accountService.LoginAsync(loginAccountDto, cancellationToken);
+            var result = await _accountService.LoginAsync(loginAccountDto, cancellationToken);
 
-            return Ok(token);
+            return Ok(result);
         }
     }
 }

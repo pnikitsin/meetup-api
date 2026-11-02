@@ -6,7 +6,6 @@ using Meetups.Domain.Entities;
 using Meetups.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace Meetups.Application.Services.Implementations
 {
@@ -51,7 +50,7 @@ namespace Meetups.Application.Services.Implementations
             return _mapper.Map<OutputAccountDto>(account);
         }
 
-        public async Task<string> LoginAsync(LoginAccountDto loginAccountDto, CancellationToken cancellationToken)
+        public async Task<LoginResultDto> LoginAsync(LoginAccountDto loginAccountDto, CancellationToken cancellationToken)
         {
             var account = await _unitOfWork.Accounts.GetAsync(account => account.Email == loginAccountDto.Email, cancellationToken)
                 ?? throw new UnauthorizedException("Email is incorrect.");
@@ -71,15 +70,11 @@ namespace Meetups.Application.Services.Implementations
             var secretKey = _configuration.GetSection("Token:Key").Value!;
             var token = _tokenService.GenerateToken(authClaims, secretKey);
 
-            var result = new
+            return new LoginResultDto
             {
-                username = account.Username,
-                access_token = token
+                Username = account.Username,
+                AccessToken = token
             };
-
-            var response = JsonSerializer.Serialize(result);
-
-            return response;
         }
     }
 }
