@@ -8,6 +8,7 @@ namespace Meetups.Web.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class MeetupController : ControllerBase
     {
         private readonly IMeetupService _meetupService;
@@ -18,7 +19,8 @@ namespace Meetups.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMeetups(CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(IEnumerable<OutputMeetupDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<OutputMeetupDto>>> GetMeetups(CancellationToken cancellationToken)
         {
             var meetups = await _meetupService.GetMeetupsAsync(cancellationToken);
 
@@ -26,7 +28,9 @@ namespace Meetups.Web.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetMeetup(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(OutputMeetupDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<OutputMeetupDto>> GetMeetup(Guid id, CancellationToken cancellationToken)
         {
             var meetup = await _meetupService.GetMeetupAsync(id, cancellationToken);
 
@@ -34,18 +38,18 @@ namespace Meetups.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMeetup(InputMeetupDto inputMeetupDto, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(OutputMeetupDto), StatusCodes.Status201Created)]
+        public async Task<ActionResult<OutputMeetupDto>> CreateMeetup(InputMeetupDto inputMeetupDto, CancellationToken cancellationToken)
         {
             var meetup = await _meetupService.CreateMeetupAsync(inputMeetupDto, cancellationToken);
 
-            var actionName = nameof(GetMeetup);
-            var routeValues = new { id = meetup.Id };
-
-            return CreatedAtAction(actionName, routeValues, meetup);
+            return CreatedAtAction(nameof(GetMeetup), new { id = meetup.Id }, meetup);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateMeetup(Guid id, InputMeetupDto inputMeetupDto, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(OutputMeetupDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<OutputMeetupDto>> UpdateMeetup(Guid id, InputMeetupDto inputMeetupDto, CancellationToken cancellationToken)
         {
             var meetup = await _meetupService.UpdateMeetupAsync(id, inputMeetupDto, cancellationToken);
 
@@ -53,6 +57,8 @@ namespace Meetups.Web.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteMeetup(Guid id, CancellationToken cancellationToken)
         {
             await _meetupService.DeleteMeetupAsync(id, cancellationToken);
