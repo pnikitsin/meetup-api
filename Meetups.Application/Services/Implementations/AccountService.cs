@@ -28,7 +28,7 @@ namespace Meetups.Application.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<OutputAccountDto> RegisterAsync(RegisterAccountDto inputAccountDto, CancellationToken cancellationToken)
+        public async Task<RegisterResultDto> RegisterAsync(RegisterAccountDto inputAccountDto, CancellationToken cancellationToken)
         {
             var account = await _unitOfWork.Accounts.GetAsync(account => account.Email == inputAccountDto.Email, cancellationToken);
 
@@ -47,7 +47,7 @@ namespace Meetups.Application.Services.Implementations
             await _unitOfWork.Accounts.AddAsync(account, cancellationToken);
             await _unitOfWork.CommitAsync(cancellationToken);
 
-            return _mapper.Map<OutputAccountDto>(account);
+            return _mapper.Map<RegisterResultDto>(account);
         }
 
         public async Task<LoginResultDto> LoginAsync(LoginAccountDto loginAccountDto, CancellationToken cancellationToken)

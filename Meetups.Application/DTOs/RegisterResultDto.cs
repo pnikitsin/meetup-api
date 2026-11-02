@@ -1,6 +1,6 @@
 ﻿namespace Meetups.Application.DTOs
 {
-    public class OutputAccountDto
+    public class RegisterResultDto
     {
         public Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;

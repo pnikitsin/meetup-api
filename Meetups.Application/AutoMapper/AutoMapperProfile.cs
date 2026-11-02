@@ -11,7 +11,7 @@ namespace Meetups.Application.AutoMapper
             CreateMap<InputMeetupDto, Meetup>();
             CreateMap<Meetup, OutputMeetupDto>();
             CreateMap<RegisterAccountDto, Account>();
-            CreateMap<Account, OutputAccountDto>();
+            CreateMap<Account, RegisterResultDto>();
         }
     }
 }
