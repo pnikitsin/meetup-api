@@ -16,14 +16,18 @@ namespace Meetups.Web.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterAccountDto inputAccountDto, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(RegisterResultDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<RegisterResultDto>> Register(RegisterAccountDto inputAccountDto, CancellationToken cancellationToken)
         {
             var account = await _accountService.RegisterAsync(inputAccountDto, cancellationToken);
 
-            return Ok(account);
+            return StatusCode(StatusCodes.Status201Created, account);
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginResultDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<LoginResultDto>> Login(LoginAccountDto loginAccountDto, CancellationToken cancellationToken)
         {
             var result = await _accountService.LoginAsync(loginAccountDto, cancellationToken);
