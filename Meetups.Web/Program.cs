@@ -18,17 +18,21 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddAccessToken(builder.Configuration);
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IMeetupService, MeetupService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddAutoMapper(cfg =>
+
+builder.Services.AddAutoMapper(configuration =>
 {
     var licenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+
     if (!string.IsNullOrWhiteSpace(licenseKey))
     {
-        cfg.LicenseKey = licenseKey;
+        configuration.LicenseKey = licenseKey;
     }
+
 }, typeof(AutoMapperProfile));
 
 builder.Services.AddRouting(options
