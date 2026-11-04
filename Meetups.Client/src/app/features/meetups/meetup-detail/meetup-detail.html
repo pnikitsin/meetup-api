@@ -1,0 +1,220 @@
+<section class="app-page">
+  <div class="app-container">
+    <a class="back-link" routerLink="/meetups">
+      <i class="bi bi-arrow-left" aria-hidden="true"></i>
+      {{ i18n.t('detail.back') }}
+    </a>
+
+    @if (loading()) {
+      <div class="skeleton mt-3" style="height: 19rem; border-radius: 1.05rem"></div>
+      <div class="row g-4 mt-1">
+        <div class="col-lg-8">
+          <div class="skeleton" style="height: 12rem; border-radius: 1.05rem"></div>
+        </div>
+        <div class="col-lg-4">
+          <div class="skeleton" style="height: 12rem; border-radius: 1.05rem"></div>
+        </div>
+      </div>
+    } @else if (notFound()) {
+      <div class="surface-card mt-3">
+        <app-empty-state
+          icon="bi-calendar2-x"
+          [title]="i18n.t('detail.notFound.title')"
+          [message]="i18n.t('detail.notFound.message')"
+        >
+          <a class="btn btn-primary" routerLink="/meetups">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i>
+            {{ i18n.t('detail.notFound.action') }}
+          </a>
+        </app-empty-state>
+      </div>
+    } @else if (error(); as message) {
+      <div class="surface-card mt-3 p-4 text-center">
+        <span class="empty-icon mx-auto"><i class="bi bi-cloud-slash" aria-hidden="true"></i></span>
+        <h2 class="h5 mt-3 mb-1">{{ i18n.t('detail.loadError.title') }}</h2>
+        <p class="text-muted-soft mb-3">{{ message }}</p>
+        <button type="button" class="btn btn-primary" (click)="load()">
+          <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+          {{ i18n.t('common.tryAgain') }}
+        </button>
+      </div>
+    } @else if (meetup(); as item) {
+      <article class="gradient-panel detail-hero fade-in">
+        <div class="detail-hero__top">
+          <span class="hero-kicker">
+            <i class="bi bi-calendar2-event" aria-hidden="true"></i>
+            {{ i18n.t('detail.kicker') }}
+          </span>
+          <span class="hero-status">
+            <span class="status-dot" aria-hidden="true"></span>
+            {{ status()?.label }}
+          </span>
+        </div>
+
+        <div class="detail-hero__main">
+          <div class="hero-date">
+            <span class="hero-date__day">{{ item.dateAndTime | meetupDate: 'day' }}</span>
+            <span class="hero-date__month">{{ item.dateAndTime | meetupDate: 'month-short' }}</span>
+            <span class="hero-date__weekday">{{ item.dateAndTime | meetupDate: 'weekday' }}</span>
+          </div>
+
+          <div class="hero-content">
+            <div class="hero-countdown">
+              <i class="bi bi-clock-history" aria-hidden="true"></i>
+              {{ countdown() }}
+              @if (relative()) {
+                <span class="hero-relative">· {{ relative() }}</span>
+              }
+            </div>
+            <h1 class="hero-title">{{ item.name }}</h1>
+            <div class="hero-meta">
+              <span>
+                <i class="bi bi-clock" aria-hidden="true"></i>
+                {{ item.dateAndTime | meetupDate: 'time' }}
+              </span>
+              <span>
+                <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                {{ item.address }}
+              </span>
+            </div>
+            <div class="hero-organizer">
+              <app-avatar [name]="item.organizer" size="md" />
+              <div>
+                <span class="hero-organizer__label">{{ i18n.t('detail.organizer') }}</span>
+                <span class="hero-organizer__name">{{ item.organizer }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn btn-light" [routerLink]="['/meetups', item.id, 'edit']">
+            <i class="bi bi-pencil" aria-hidden="true"></i>
+            {{ i18n.t('detail.edit') }}
+          </a>
+          <button type="button" class="btn btn-light" (click)="downloadCalendar()">
+            <i class="bi bi-calendar-plus" aria-hidden="true"></i>
+            {{ i18n.t('detail.calendar') }}
+          </button>
+          <button type="button" class="btn btn-light" (click)="share()">
+            <i class="bi bi-share" aria-hidden="true"></i>
+            {{ i18n.t('detail.share') }}
+          </button>
+        </div>
+      </article>
+
+      <div class="row g-4 mt-1 fade-in">
+        <div class="col-lg-8">
+          <div class="surface-card detail-card">
+            <div class="detail-card__head">
+              <span class="detail-card__icon"><i class="bi bi-text-paragraph" aria-hidden="true"></i></span>
+              <h2>{{ i18n.t('detail.description') }}</h2>
+            </div>
+            <p class="detail-description">{{ item.description }}</p>
+          </div>
+
+          <div class="surface-card detail-card">
+            <div class="detail-card__head">
+              <span class="detail-card__icon"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
+              <h2>{{ i18n.t('detail.info.title') }}</h2>
+            </div>
+
+            <div class="detail-info">
+              <div class="detail-info__row">
+                <span class="detail-info__icon"><i class="bi bi-calendar3" aria-hidden="true"></i></span>
+                <div>
+                  <span class="detail-info__label">{{ i18n.t('detail.info.date') }}</span>
+                  <strong>{{ item.dateAndTime | meetupDate: 'full' }}</strong>
+                  <span class="detail-info__hint">{{ item.dateAndTime | meetupDate: 'weekday' }}</span>
+                </div>
+              </div>
+
+              <div class="detail-info__row">
+                <span class="detail-info__icon"><i class="bi bi-clock" aria-hidden="true"></i></span>
+                <div>
+                  <span class="detail-info__label">{{ i18n.t('detail.info.start') }}</span>
+                  <strong>{{ item.dateAndTime | meetupDate: 'time' }}</strong>
+                  <span class="detail-info__hint">{{ i18n.t('detail.info.duration') }}</span>
+                </div>
+              </div>
+
+              <div class="detail-info__row">
+                <span class="detail-info__icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
+                <div>
+                  <span class="detail-info__label">{{ i18n.t('detail.info.place') }}</span>
+                  <strong>{{ item.address }}</strong>
+                </div>
+              </div>
+
+              <div class="detail-info__row">
+                <span class="detail-info__icon"><i class="bi bi-person" aria-hidden="true"></i></span>
+                <div>
+                  <span class="detail-info__label">{{ i18n.t('detail.organizer') }}</span>
+                  <strong>{{ item.organizer }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="col-lg-4">
+          <div class="soft-panel countdown-panel">
+            <span class="countdown-panel__icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+            <div>
+              <span class="countdown-panel__label">
+                {{
+                  status()?.key === 'past'
+                    ? i18n.t('detail.countdown.status')
+                    : i18n.t('detail.countdown.until')
+                }}
+              </span>
+              <strong class="countdown-panel__value">{{ countdown() }}</strong>
+            </div>
+          </div>
+
+          <div class="surface-card side-card">
+            <span class="eyebrow">{{ i18n.t('detail.organizer') }}</span>
+            <div class="organizer-profile">
+              <app-avatar [name]="item.organizer" size="xl" />
+              <h2>{{ item.organizer }}</h2>
+              <p>{{ i18n.t('detail.side.hosts') }}</p>
+            </div>
+          </div>
+
+          <div class="surface-card side-card">
+            <h2 class="side-card__title">{{ i18n.t('detail.actions.title') }}</h2>
+            <div class="side-actions">
+              <button type="button" class="btn btn-soft" (click)="downloadCalendar()">
+                <i class="bi bi-calendar-plus" aria-hidden="true"></i>
+                {{ i18n.t('detail.actions.calendar') }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary" (click)="share()">
+                <i class="bi bi-share" aria-hidden="true"></i>
+                {{ i18n.t('detail.actions.share') }}
+              </button>
+              <a class="btn btn-outline-secondary" [routerLink]="['/meetups', item.id, 'edit']">
+                <i class="bi bi-pencil" aria-hidden="true"></i>
+                {{ i18n.t('detail.edit') }}
+              </a>
+            </div>
+            <hr class="divider my-3" />
+            <button
+              type="button"
+              class="btn btn-outline-danger w-100"
+              [disabled]="deleting()"
+              (click)="remove()"
+            >
+              @if (deleting()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                {{ i18n.t('detail.actions.deleting') }}
+              } @else {
+                <i class="bi bi-trash3" aria-hidden="true"></i>
+                {{ i18n.t('detail.actions.delete') }}
+              }
+            </button>
+          </div>
+        </aside>
+      </div>
+    }
+  </div>
+</section>

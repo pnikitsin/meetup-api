@@ -1,0 +1,63 @@
+<div class="auth-shell">
+  <aside class="auth-visual">
+    <div class="auth-visual__top">
+      <app-brand variant="light" />
+    </div>
+
+    <div class="auth-visual__content">
+      <span class="auth-kicker">{{ i18n.t('auth.kicker') }}</span>
+      <h1 class="auth-headline">
+        {{ i18n.t('auth.headline1') }}<br />
+        <span>{{ i18n.t('auth.headline2') }}</span>
+      </h1>
+      <p class="auth-lead">{{ i18n.t('auth.lead') }}</p>
+
+      <ul class="auth-features">
+        <li>
+          <span class="auth-feature__icon"><i class="bi bi-calendar2-check"></i></span>
+          <div>
+            <strong>{{ i18n.t('auth.feature.schedule.title') }}</strong>
+            <span>{{ i18n.t('auth.feature.schedule.text') }}</span>
+          </div>
+        </li>
+        <li>
+          <span class="auth-feature__icon"><i class="bi bi-people"></i></span>
+          <div>
+            <strong>{{ i18n.t('auth.feature.organizers.title') }}</strong>
+            <span>{{ i18n.t('auth.feature.organizers.text') }}</span>
+          </div>
+        </li>
+        <li>
+          <span class="auth-feature__icon"><i class="bi bi-calendar-plus"></i></span>
+          <div>
+            <strong>{{ i18n.t('auth.feature.calendar.title') }}</strong>
+            <span>{{ i18n.t('auth.feature.calendar.text') }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="auth-visual__footer">
+      <span>{{ i18n.t('app.copyright', { year: year }) }}</span>
+      <span>{{ i18n.t('app.footerMadeFor') }}</span>
+    </div>
+  </aside>
+
+  <main class="auth-main">
+    <div class="auth-topbar">
+      <div class="auth-mobile-brand d-lg-none">
+        <app-brand />
+      </div>
+      <app-language-switcher />
+    </div>
+
+    <div class="auth-panel">
+      <router-outlet />
+    </div>
+
+    <p class="auth-note">
+      <i class="bi bi-shield-check" aria-hidden="true"></i>
+      {{ i18n.t('auth.note') }}
+    </p>
+  </main>
+</div>

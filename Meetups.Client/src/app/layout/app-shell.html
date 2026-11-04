@@ -1,0 +1,113 @@
+<div class="app-shell">
+  <header class="app-header">
+    <div class="app-container header-inner">
+      <app-brand />
+
+      <nav class="main-nav d-none d-lg-flex" [attr.aria-label]="i18n.t('nav.main')">
+        <a
+          class="main-nav__link"
+          routerLink="/dashboard"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="bi bi-grid-1x2"></i>
+          {{ i18n.t('nav.dashboard') }}
+        </a>
+        <a class="main-nav__link" routerLink="/meetups" routerLinkActive="is-active">
+          <i class="bi bi-calendar2-week"></i>
+          {{ i18n.t('nav.meetups') }}
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <app-language-switcher class="d-none d-sm-inline-flex" />
+
+        <a class="btn btn-primary btn-sm header-create d-none d-sm-inline-flex" routerLink="/meetups/new">
+          <i class="bi bi-plus-lg"></i>
+          {{ i18n.t('nav.newMeetup') }}
+        </a>
+
+        <div class="user-menu">
+          <button
+            type="button"
+            class="user-trigger"
+            [attr.aria-expanded]="userMenuOpen()"
+            aria-haspopup="menu"
+            (click)="toggleUserMenu($event)"
+          >
+            <app-avatar [name]="username() ?? '?'" size="sm" />
+            <span class="user-name d-none d-md-inline">{{ username() }}</span>
+            <i class="bi bi-chevron-down user-chevron" aria-hidden="true"></i>
+          </button>
+
+          @if (userMenuOpen()) {
+            <div class="user-dropdown" role="menu" (click)="$event.stopPropagation()">
+              <div class="user-dropdown__head">
+                <app-avatar [name]="username() ?? '?'" size="md" />
+                <div>
+                  <div class="user-dropdown__name">{{ username() }}</div>
+                  <div class="user-dropdown__caption">{{ i18n.t('app.accountCaption') }}</div>
+                </div>
+              </div>
+              <hr class="dropdown-divider" />
+              <a class="user-dropdown__item" role="menuitem" routerLink="/meetups/new">
+                <i class="bi bi-plus-circle"></i>
+                {{ i18n.t('nav.createMeetup') }}
+              </a>
+              <button type="button" class="user-dropdown__item is-danger" role="menuitem" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                {{ i18n.t('nav.logout') }}
+              </button>
+            </div>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="nav-toggler d-lg-none"
+          [attr.aria-expanded]="navOpen()"
+          [attr.aria-label]="i18n.t('nav.openMenu')"
+          (click)="toggleNav($event)"
+        >
+          <i class="bi" [class]="navOpen() ? 'bi-x-lg' : 'bi-list'"></i>
+        </button>
+      </div>
+    </div>
+
+    @if (navOpen()) {
+      <nav class="mobile-nav d-lg-none" [attr.aria-label]="i18n.t('nav.mobile')">
+        <a class="mobile-nav__link" routerLink="/dashboard" routerLinkActive="is-active" (click)="closeMenus()">
+          <i class="bi bi-grid-1x2"></i>
+          {{ i18n.t('nav.dashboard') }}
+        </a>
+        <a class="mobile-nav__link" routerLink="/meetups" routerLinkActive="is-active" (click)="closeMenus()">
+          <i class="bi bi-calendar2-week"></i>
+          {{ i18n.t('nav.meetups') }}
+        </a>
+        <a class="btn btn-primary w-100" routerLink="/meetups/new" (click)="closeMenus()">
+          <i class="bi bi-plus-lg"></i>
+          {{ i18n.t('nav.newMeetup') }}
+        </a>
+        <app-language-switcher class="d-sm-none" />
+      </nav>
+    }
+  </header>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+
+  <footer class="app-footer">
+    <div class="app-container footer-inner">
+      <div class="footer-brand">
+        <app-brand [showTagline]="false" />
+        <p class="footer-caption">{{ i18n.t('app.footerCaption') }}</p>
+      </div>
+      <div class="footer-meta">
+        <span>{{ i18n.t('app.copyright', { year: year }) }}</span>
+        <span class="footer-dot" aria-hidden="true"></span>
+        <span>Angular 22 · Bootstrap 5</span>
+      </div>
+    </div>
+  </footer>
+</div>

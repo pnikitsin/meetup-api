@@ -1,0 +1,238 @@
+<section class="app-page">
+  <div class="app-container">
+    <a class="back-link" [routerLink]="backLink">
+      <i class="bi bi-arrow-left" aria-hidden="true"></i>
+      {{ isEdit() ? i18n.t('form.backToMeetup') : i18n.t('form.backToAll') }}
+    </a>
+
+    <header class="page-head fade-in">
+      <div>
+        <span class="eyebrow">
+          <i class="bi" [class]="isEdit() ? 'bi-pencil-square' : 'bi-calendar2-plus'" aria-hidden="true"></i>
+          {{ isEdit() ? i18n.t('form.eyebrow.edit') : i18n.t('form.eyebrow.create') }}
+        </span>
+        <h1 class="page-title">{{ title() }}</h1>
+        <p class="page-subtitle">{{ subtitle() }}</p>
+      </div>
+    </header>
+
+    @if (loading()) {
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="skeleton" style="height: 34rem; border-radius: 1.05rem"></div>
+        </div>
+        <div class="col-lg-4">
+          <div class="skeleton" style="height: 14rem; border-radius: 1.05rem"></div>
+        </div>
+      </div>
+    } @else if (loadError(); as message) {
+      <div class="surface-card p-4 text-center">
+        <span class="empty-icon mx-auto"><i class="bi bi-calendar2-x" aria-hidden="true"></i></span>
+        <h2 class="h5 mt-3 mb-1">{{ i18n.t('form.loadError.title') }}</h2>
+        <p class="text-muted-soft mb-3">{{ message }}</p>
+        <div class="d-flex justify-content-center gap-2">
+          <a class="btn btn-outline-secondary" routerLink="/meetups">
+            {{ i18n.t('form.backToList') }}
+          </a>
+          <button type="button" class="btn btn-primary" (click)="load()">
+            <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+            {{ i18n.t('common.retry') }}
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="row g-4 fade-in">
+        <div class="col-lg-8">
+          <form class="surface-card form-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            @if (serverError(); as error) {
+              <div class="auth-alert mb-3" role="alert">
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                <span>{{ error }}</span>
+              </div>
+            }
+
+            <section class="form-section">
+              <div class="form-section__head">
+                <span class="form-section__num">01</span>
+                <div>
+                  <h2>{{ i18n.t('form.section.main.title') }}</h2>
+                  <p>{{ i18n.t('form.section.main.subtitle') }}</p>
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="field-head">
+                    <label class="form-label" for="meetup-name">{{ i18n.t('form.name') }}</label>
+                    <span class="field-counter">{{ counter('name', 64) }}</span>
+                  </div>
+                  <input
+                    id="meetup-name"
+                    type="text"
+                    class="form-control"
+                    formControlName="name"
+                    maxlength="64"
+                    [placeholder]="i18n.t('form.name.placeholder')"
+                    [class.is-invalid]="isInvalid('name')"
+                    (input)="clearServerError('name')"
+                  />
+                  @if (isInvalid('name')) {
+                    <div class="invalid-feedback d-block">{{ errorFor('name') }}</div>
+                  }
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="meetup-date">{{ i18n.t('form.date') }}</label>
+                  <input
+                    id="meetup-date"
+                    type="datetime-local"
+                    class="form-control"
+                    formControlName="dateAndTime"
+                    [class.is-invalid]="isInvalid('dateAndTime')"
+                    (input)="clearServerError('dateAndTime')"
+                  />
+                  @if (isInvalid('dateAndTime')) {
+                    <div class="invalid-feedback d-block">{{ errorFor('dateAndTime') }}</div>
+                  } @else if (dateInPast()) {
+                    <div class="form-text text-warning-emphasis">
+                      <i class="bi bi-clock-history" aria-hidden="true"></i>
+                      {{ i18n.t('form.date.past') }}
+                    </div>
+                  }
+                </div>
+
+                <div class="col-md-6">
+                  <div class="field-head">
+                    <label class="form-label" for="meetup-address">{{ i18n.t('form.address') }}</label>
+                    <span class="field-counter">{{ counter('address', 64) }}</span>
+                  </div>
+                  <input
+                    id="meetup-address"
+                    type="text"
+                    class="form-control"
+                    formControlName="address"
+                    maxlength="64"
+                    [placeholder]="i18n.t('form.address.placeholder')"
+                    [class.is-invalid]="isInvalid('address')"
+                    (input)="clearServerError('address')"
+                  />
+                  @if (isInvalid('address')) {
+                    <div class="invalid-feedback d-block">{{ errorFor('address') }}</div>
+                  }
+                </div>
+              </div>
+            </section>
+
+            <hr class="divider form-divider" />
+
+            <section class="form-section">
+              <div class="form-section__head">
+                <span class="form-section__num">02</span>
+                <div>
+                  <h2>{{ i18n.t('form.section.organizer.title') }}</h2>
+                  <p>{{ i18n.t('form.section.organizer.subtitle') }}</p>
+                </div>
+              </div>
+
+              <div class="field-head">
+                <label class="form-label" for="meetup-organizer">{{ i18n.t('form.organizer') }}</label>
+                <span class="field-counter">{{ counter('organizer', 100) }}</span>
+              </div>
+              <input
+                id="meetup-organizer"
+                type="text"
+                class="form-control"
+                formControlName="organizer"
+                maxlength="100"
+                [placeholder]="i18n.t('form.organizer.placeholder')"
+                [class.is-invalid]="isInvalid('organizer')"
+                (input)="clearServerError('organizer')"
+              />
+              @if (isInvalid('organizer')) {
+                <div class="invalid-feedback d-block">{{ errorFor('organizer') }}</div>
+              }
+            </section>
+
+            <hr class="divider form-divider" />
+
+            <section class="form-section">
+              <div class="form-section__head">
+                <span class="form-section__num">03</span>
+                <div>
+                  <h2>{{ i18n.t('form.section.description.title') }}</h2>
+                  <p>{{ i18n.t('form.section.description.subtitle') }}</p>
+                </div>
+              </div>
+
+              <div class="field-head">
+                <label class="form-label" for="meetup-description">{{ i18n.t('form.description') }}</label>
+                <span class="field-counter">{{ counter('description', 512) }}</span>
+              </div>
+              <textarea
+                id="meetup-description"
+                class="form-control"
+                rows="6"
+                formControlName="description"
+                maxlength="512"
+                [placeholder]="i18n.t('form.description.placeholder')"
+                [class.is-invalid]="isInvalid('description')"
+                (input)="clearServerError('description')"
+              ></textarea>
+              @if (isInvalid('description')) {
+                <div class="invalid-feedback d-block">{{ errorFor('description') }}</div>
+              }
+            </section>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline-secondary" [disabled]="saving()" (click)="cancel()">
+                {{ i18n.t('common.cancel') }}
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="saving()">
+                @if (saving()) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                  {{ i18n.t('form.saving') }}
+                } @else {
+                  <i class="bi bi-check-lg" aria-hidden="true"></i>
+                  {{ submitLabel() }}
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="col-lg-4">
+          <div class="surface-card tips-card">
+            <span class="tips-icon"><i class="bi bi-lightbulb" aria-hidden="true"></i></span>
+            <h2>{{ i18n.t('form.tips.title') }}</h2>
+            <ul class="tips-list">
+              <li>{{ i18n.t('form.tips.1') }}</li>
+              <li>{{ i18n.t('form.tips.2') }}</li>
+              <li>{{ i18n.t('form.tips.3') }}</li>
+              <li>{{ i18n.t('form.tips.4') }}</li>
+              <li>{{ i18n.t('form.tips.5') }}</li>
+            </ul>
+          </div>
+
+          <div class="soft-panel preview-card">
+            <span class="eyebrow">{{ i18n.t('form.preview') }}</span>
+            @if (previewDate(); as value) {
+              <div class="preview-date">
+                <span class="preview-date__day">{{ value | meetupDate: 'day' }}</span>
+                <span class="preview-date__month">{{ value | meetupDate: 'month-short' }}</span>
+              </div>
+              <div class="preview-info">
+                <strong>{{ value | meetupDate: 'full' }}</strong>
+                <span>{{ value | meetupDate: 'weekday' }}, {{ value | meetupDate: 'time' }}</span>
+              </div>
+            } @else {
+              <div class="preview-empty">
+                <i class="bi bi-calendar3" aria-hidden="true"></i>
+                <span>{{ i18n.t('form.preview.empty') }}</span>
+              </div>
+            }
+          </div>
+        </aside>
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,91 @@
+<div class="auth-form-head">
+  <span class="eyebrow mb-2">
+    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+    {{ i18n.t('auth.login.eyebrow') }}
+  </span>
+  <h2>{{ i18n.t('auth.login.title') }}</h2>
+  <p>{{ i18n.t('auth.login.subtitle') }}</p>
+</div>
+
+@if (expired) {
+  <div class="auth-alert is-info mb-3" role="status">
+    <i class="bi bi-clock-history" aria-hidden="true"></i>
+    <span>{{ i18n.t('auth.login.expired') }}</span>
+  </div>
+}
+
+@if (serverError(); as error) {
+  <div class="auth-alert mb-3" role="alert">
+    <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+    <span>{{ error }}</span>
+  </div>
+}
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="mb-3">
+    <label class="form-label" for="login-email">{{ i18n.t('auth.login.email') }}</label>
+    <div class="input-icon-group">
+      <i class="bi bi-envelope" aria-hidden="true"></i>
+      <input
+        id="login-email"
+        type="email"
+        class="form-control"
+        formControlName="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        [class.is-invalid]="isInvalid('email')"
+        (input)="clearServerError('email')"
+      />
+    </div>
+    @if (isInvalid('email')) {
+      <div class="invalid-feedback d-block">{{ errorFor('email') }}</div>
+    }
+  </div>
+
+  <div class="mb-1">
+    <label class="form-label" for="login-password">{{ i18n.t('auth.login.password') }}</label>
+    <div class="input-icon-group">
+      <i class="bi bi-lock" aria-hidden="true"></i>
+      <input
+        id="login-password"
+        [type]="showPassword() ? 'text' : 'password'"
+        class="form-control has-toggle"
+        formControlName="password"
+        autocomplete="current-password"
+        [placeholder]="i18n.t('auth.login.passwordPlaceholder')"
+        [class.is-invalid]="isInvalid('password')"
+        (input)="clearServerError('password')"
+      />
+      <button
+        type="button"
+        class="password-toggle"
+        [attr.aria-label]="
+          showPassword()
+            ? i18n.t('auth.login.hidePassword')
+            : i18n.t('auth.login.showPassword')
+        "
+        (click)="togglePassword()"
+      >
+        <i class="bi" [class]="showPassword() ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+      </button>
+    </div>
+    @if (isInvalid('password')) {
+      <div class="invalid-feedback d-block">{{ errorFor('password') }}</div>
+    }
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-lg w-100 mt-4" [disabled]="loading()">
+    @if (loading()) {
+      <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+      {{ i18n.t('auth.login.submitting') }}
+    } @else {
+      {{ i18n.t('auth.login.submit') }}
+      <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+    }
+  </button>
+</form>
+
+<p class="auth-switch">
+  {{ i18n.t('auth.login.noAccount') }}
+  <a routerLink="/register">{{ i18n.t('auth.login.createAccount') }}</a>
+</p>

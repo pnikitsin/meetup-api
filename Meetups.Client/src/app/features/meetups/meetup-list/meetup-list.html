@@ -1,0 +1,300 @@
+<section class="app-page">
+  <div class="app-container">
+    <header class="page-head fade-in">
+      <div>
+        <span class="eyebrow">
+          <i class="bi bi-calendar2-week" aria-hidden="true"></i>
+          {{ i18n.t('meetups.eyebrow') }}
+        </span>
+        <h1 class="page-title">{{ i18n.t('meetups.title') }}</h1>
+        <p class="page-subtitle">{{ i18n.t('meetups.subtitle') }}</p>
+      </div>
+      <a class="btn btn-primary" routerLink="/meetups/new">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+        {{ i18n.t('nav.newMeetup') }}
+      </a>
+    </header>
+
+    <div class="surface-card toolbar fade-in">
+      <div class="search-box">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <input
+          type="search"
+          class="form-control"
+          [placeholder]="i18n.t('meetups.searchPlaceholder')"
+          [attr.aria-label]="i18n.t('meetups.searchLabel')"
+          [value]="query()"
+          (input)="onSearch($event)"
+        />
+        @if (query()) {
+          <button
+            type="button"
+            class="search-clear"
+            [attr.aria-label]="i18n.t('meetups.clearSearch')"
+            (click)="clearSearch()"
+          >
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+          </button>
+        }
+      </div>
+
+      <div class="filter-group" role="group" [attr.aria-label]="i18n.t('meetups.filterLabel')">
+        @for (option of filters(); track option.value) {
+          <button
+            type="button"
+            class="filter-chip"
+            [class.is-active]="filter() === option.value"
+            [attr.aria-pressed]="filter() === option.value"
+            (click)="setFilter(option.value)"
+          >
+            {{ option.label }}
+            <span>{{ counts()[option.value] }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="toolbar-end">
+        <label class="sort-select">
+          <i class="bi bi-sort-down" aria-hidden="true"></i>
+          <select
+            class="form-select"
+            [attr.aria-label]="i18n.t('meetups.sort.label')"
+            [value]="sort()"
+            (change)="setSort($event)"
+          >
+            @for (option of sortOptions(); track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="view-toggle" role="group" [attr.aria-label]="i18n.t('meetups.view.label')">
+          <button
+            type="button"
+            class="view-toggle__btn"
+            [class.is-active]="view() === 'grid'"
+            [attr.aria-label]="i18n.t('meetups.view.grid')"
+            [attr.aria-pressed]="view() === 'grid'"
+            (click)="setView('grid')"
+          >
+            <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="view-toggle__btn"
+            [class.is-active]="view() === 'list'"
+            [attr.aria-label]="i18n.t('meetups.view.list')"
+            [attr.aria-pressed]="view() === 'list'"
+            (click)="setView('list')"
+          >
+            <i class="bi bi-list-ul" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    @if (loading()) {
+      <div class="results-bar">
+        <span class="skeleton" style="width: 8rem; height: 0.9rem"></span>
+      </div>
+      <div class="meetup-grid">
+        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+          <div class="meetup-card surface-card">
+            <div class="d-flex justify-content-between">
+              <div class="skeleton" style="width: 3.2rem; height: 3.2rem; border-radius: 0.7rem"></div>
+              <div class="skeleton" style="width: 5rem; height: 1.4rem; border-radius: 999px"></div>
+            </div>
+            <div class="skeleton mt-3" style="width: 75%; height: 1.1rem"></div>
+            <div class="skeleton mt-2" style="width: 100%; height: 0.8rem"></div>
+            <div class="skeleton mt-1" style="width: 85%; height: 0.8rem"></div>
+            <div class="skeleton mt-4" style="width: 55%; height: 0.8rem"></div>
+          </div>
+        }
+      </div>
+    } @else if (error(); as message) {
+      <div class="surface-card p-4 text-center">
+        <span class="empty-icon mx-auto"><i class="bi bi-cloud-slash" aria-hidden="true"></i></span>
+        <h2 class="h5 mt-3 mb-1">{{ i18n.t('meetups.loadErrorTitle') }}</h2>
+        <p class="text-muted-soft mb-3">{{ message }}</p>
+        <button type="button" class="btn btn-primary" (click)="load()">
+          <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+          {{ i18n.t('common.tryAgain') }}
+        </button>
+      </div>
+    } @else if (meetups().length === 0) {
+      <div class="surface-card mt-4">
+        <app-empty-state
+          icon="bi-calendar2-plus"
+          [title]="i18n.t('meetups.empty.title')"
+          [message]="i18n.t('meetups.empty.message')"
+        >
+          <a class="btn btn-primary" routerLink="/meetups/new">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            {{ i18n.t('meetups.empty.action') }}
+          </a>
+        </app-empty-state>
+      </div>
+    } @else {
+      <div class="results-bar">
+        <span class="results-count">
+          {{ i18n.plural('meetups.found', visible().length) }}
+        </span>
+        @if (hasActiveFilters()) {
+          <button type="button" class="btn btn-link btn-sm reset-link" (click)="resetFilters()">
+            {{ i18n.t('meetups.resetFilters') }}
+          </button>
+        }
+      </div>
+
+      @if (visible().length === 0) {
+        <div class="surface-card">
+          <app-empty-state
+            icon="bi-search"
+            [title]="i18n.t('meetups.noResults.title')"
+            [message]="i18n.t('meetups.noResults.message')"
+          >
+            <button type="button" class="btn btn-soft" (click)="resetFilters()">
+              <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+              {{ i18n.t('meetups.resetFilters') }}
+            </button>
+          </app-empty-state>
+        </div>
+      } @else if (view() === 'grid') {
+        <div class="meetup-grid fade-in">
+          @for (meetup of visible(); track meetup.id) {
+            <article class="meetup-card surface-card surface-card--hover" [class.is-past]="statusOf(meetup).key === 'past'">
+              <div class="meetup-card__top">
+                <span class="date-tile date-tile--lg">
+                  <strong>{{ meetup.dateAndTime | meetupDate: 'day' }}</strong>
+                  <span>{{ meetup.dateAndTime | meetupDate: 'month-short' }}</span>
+                  <small>{{ meetup.dateAndTime | meetupDate: 'weekday-short' }}</small>
+                </span>
+                <span [class]="'badge-soft is-' + statusOf(meetup).key">
+                  <span class="status-dot" aria-hidden="true"></span>
+                  {{ statusOf(meetup).label }}
+                </span>
+              </div>
+
+              <div class="meetup-card__body">
+                <h2 class="meetup-card__title">
+                  <a [routerLink]="['/meetups', meetup.id]">{{ meetup.name }}</a>
+                </h2>
+                <p class="meetup-card__description text-clamp-2">{{ meetup.description }}</p>
+                <div class="meetup-card__meta">
+                  <span>
+                    <i class="bi bi-clock" aria-hidden="true"></i>
+                    {{ meetup.dateAndTime | meetupDate: 'time' }} · {{ relativeOf(meetup) }}
+                  </span>
+                  <span>
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    {{ meetup.address }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="meetup-card__footer">
+                <div class="meetup-card__organizer">
+                  <app-avatar [name]="meetup.organizer" size="sm" />
+                  <span>{{ meetup.organizer }}</span>
+                </div>
+                <div class="meetup-card__actions">
+                  <a
+                    class="icon-btn"
+                    [routerLink]="['/meetups', meetup.id]"
+                    [attr.aria-label]="i18n.t('meetups.open')"
+                    [attr.title]="i18n.t('meetups.openShort')"
+                  >
+                    <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    class="icon-btn"
+                    [routerLink]="['/meetups', meetup.id, 'edit']"
+                    [attr.aria-label]="i18n.t('meetups.edit')"
+                    [attr.title]="i18n.t('meetups.editShort')"
+                  >
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                  </a>
+                  <button
+                    type="button"
+                    class="icon-btn is-danger"
+                    [attr.aria-label]="i18n.t('meetups.delete')"
+                    [attr.title]="i18n.t('meetups.deleteShort')"
+                    [disabled]="deletingId() === meetup.id"
+                    (click)="remove(meetup)"
+                  >
+                    @if (deletingId() === meetup.id) {
+                      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    } @else {
+                      <i class="bi bi-trash3" aria-hidden="true"></i>
+                    }
+                  </button>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <div class="surface-card meetup-rows fade-in">
+          @for (meetup of visible(); track meetup.id) {
+            <article class="meetup-row" [class.is-past]="statusOf(meetup).key === 'past'">
+              <span class="date-tile">
+                <strong>{{ meetup.dateAndTime | meetupDate: 'day' }}</strong>
+                <span>{{ meetup.dateAndTime | meetupDate: 'month-short' }}</span>
+              </span>
+
+              <div class="meetup-row__main">
+                <div class="meetup-row__heading">
+                  <a class="meetup-row__title" [routerLink]="['/meetups', meetup.id]">{{ meetup.name }}</a>
+                  <span [class]="'badge-soft is-' + statusOf(meetup).key">{{ statusOf(meetup).label }}</span>
+                </div>
+                <div class="meetup-row__meta">
+                  <span><i class="bi bi-clock" aria-hidden="true"></i>{{ meetup.dateAndTime | meetupDate: 'datetime' }}</span>
+                  <span><i class="bi bi-geo-alt" aria-hidden="true"></i>{{ meetup.address }}</span>
+                </div>
+                <p class="meetup-row__description text-clamp-1">{{ meetup.description }}</p>
+              </div>
+
+              <div class="meetup-row__organizer">
+                <app-avatar [name]="meetup.organizer" size="sm" />
+                <span>{{ meetup.organizer }}</span>
+              </div>
+
+              <div class="meetup-row__actions">
+                <a
+                  class="icon-btn"
+                  [routerLink]="['/meetups', meetup.id]"
+                  [attr.aria-label]="i18n.t('meetups.openShort')"
+                  [attr.title]="i18n.t('meetups.openShort')"
+                >
+                  <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                </a>
+                <a
+                  class="icon-btn"
+                  [routerLink]="['/meetups', meetup.id, 'edit']"
+                  [attr.aria-label]="i18n.t('meetups.editShort')"
+                  [attr.title]="i18n.t('meetups.editShort')"
+                >
+                  <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+                <button
+                  type="button"
+                  class="icon-btn is-danger"
+                  [attr.aria-label]="i18n.t('meetups.deleteShort')"
+                  [attr.title]="i18n.t('meetups.deleteShort')"
+                  [disabled]="deletingId() === meetup.id"
+                  (click)="remove(meetup)"
+                >
+                  @if (deletingId() === meetup.id) {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  } @else {
+                    <i class="bi bi-trash3" aria-hidden="true"></i>
+                  }
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    }
+  </div>
+</section>
