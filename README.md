@@ -1,12 +1,12 @@
 # Meetups API
 
 REST API for managing meetups: JWT authentication, meetup CRUD, Scalar documentation.
-Stack: .NET 10, ASP.NET Core, EF Core + SQL Server, AutoMapper, BCrypt, OpenAPI + Scalar, Serilog.
+Stack: .NET 11, ASP.NET Core, EF Core + SQL Server, AutoMapper, BCrypt, OpenAPI + Scalar, Serilog.
 Layers: `Domain` → `Application` → `Infrastructure` → `Web`.
 
 ## Running
 
-Requires .NET SDK 10 and SQL Server. Secrets are kept in User Secrets (Development only):
+Requires .NET SDK 11 and SQL Server. Secrets are kept in User Secrets (Development only):
 
 ```powershell
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=127.0.0.1,1433;Database=meetups;User Id=sa;Password=<password>;TrustServerCertificate=True" --project Meetups.Web
