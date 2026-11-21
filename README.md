@@ -32,7 +32,8 @@ The token goes in the `Authorization: Bearer <token>` header. Errors: `{ "error"
 
 `Meetups.Client` — Angular 22 SPA (standalone, zoneless, Bootstrap 5) for this API. It covers
 authentication, dashboard, meetup list with search/filters/sorting, detail page with ICS export,
-create/edit forms and delete confirmation, with RU/EN localization.
+create/edit forms and delete confirmation, with RU/EN localization and a light/dark theme switch
+that is remembered between visits.
 
 ```powershell
 cd Meetups.Client

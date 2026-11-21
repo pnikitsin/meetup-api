@@ -47,8 +47,8 @@ import { ToastKind, Toasts } from './toast';
       overflow: hidden;
       border: 1px solid var(--app-border);
       border-radius: 0.9rem;
-      background: #fff;
-      box-shadow: 0 20px 48px -18px rgba(20, 25, 43, 0.35);
+      background: var(--app-elevated);
+      box-shadow: var(--app-shadow);
       pointer-events: auto;
       animation: toast-in 0.26s ease both;
     }
@@ -82,13 +82,13 @@ import { ToastKind, Toasts } from './toast';
     }
 
     .app-toast--success .toast-icon {
-      background: #e9f8f1;
-      color: #0d7a4e;
+      background: var(--app-success-soft);
+      color: var(--app-success-ink);
     }
 
     .app-toast--error .toast-icon {
-      background: #fff0f1;
-      color: #d92d43;
+      background: var(--app-danger-soft);
+      color: var(--app-danger-ink);
     }
 
     .app-toast--info .toast-icon {

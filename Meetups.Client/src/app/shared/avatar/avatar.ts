@@ -26,7 +26,7 @@ export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--app-avatar-ring);
       border-radius: 50%;
       background: linear-gradient(
         135deg,

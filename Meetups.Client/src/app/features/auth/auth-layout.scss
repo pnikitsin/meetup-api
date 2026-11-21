@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   min-height: 100vh;
-  background: #fff;
+  background: var(--app-surface);
 }
 
 .auth-visual {
@@ -151,8 +151,8 @@
   justify-content: center;
   padding: 2.5rem 1.5rem 1.5rem;
   background:
-    radial-gradient(700px 280px at 100% 0%, rgba(91, 75, 219, 0.06), transparent 65%),
-    #fff;
+    radial-gradient(700px 280px at 100% 0%, var(--app-glow-1), transparent 65%),
+    var(--app-surface);
 }
 
 .auth-topbar {
@@ -165,7 +165,10 @@
   margin-bottom: 1.5rem;
 }
 
-.auth-topbar app-language-switcher {
+.auth-topbar__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-left: auto;
 }
 

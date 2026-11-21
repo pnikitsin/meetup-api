@@ -4,17 +4,21 @@ import { Auth } from '../../core/auth/auth';
 import { I18n } from '../../core/i18n/i18n';
 import { Brand } from '../../shared/brand/brand';
 import { LanguageSwitcher } from '../../shared/language-switcher/language-switcher';
+import { ThemeToggle } from '../../shared/theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-not-found',
   standalone: true,
-  imports: [RouterLink, Brand, LanguageSwitcher],
+  imports: [RouterLink, Brand, LanguageSwitcher, ThemeToggle],
   template: `
     <div class="notfound">
       <div class="notfound__inner">
         <div class="notfound__topbar">
           <app-brand />
-          <app-language-switcher />
+          <div class="notfound__tools">
+            <app-language-switcher />
+            <app-theme-toggle />
+          </div>
         </div>
         <div class="surface-card notfound__card">
           <div class="notfound__code" aria-hidden="true">404</div>
@@ -42,8 +46,8 @@ import { LanguageSwitcher } from '../../shared/language-switcher/language-switch
       min-height: 100vh;
       padding: 1.5rem;
       background:
-        radial-gradient(800px 400px at 15% 0%, rgba(91, 75, 219, 0.12), transparent 60%),
-        radial-gradient(700px 360px at 90% 10%, rgba(168, 85, 247, 0.1), transparent 62%),
+        radial-gradient(800px 400px at 15% 0%, var(--app-glow-1), transparent 60%),
+        radial-gradient(700px 360px at 90% 10%, var(--app-glow-2), transparent 62%),
         var(--app-bg);
     }
 
@@ -57,6 +61,12 @@ import { LanguageSwitcher } from '../../shared/language-switcher/language-switch
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+    }
+
+    .notfound__tools {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .notfound__card {

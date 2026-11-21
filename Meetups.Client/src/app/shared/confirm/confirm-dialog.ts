@@ -85,8 +85,8 @@ import { ConfirmDialog } from './confirm';
     }
 
     .confirm-icon.is-danger {
-      background: #fff0f1;
-      color: #d92d43;
+      background: var(--app-danger-soft);
+      color: var(--app-danger-ink);
     }
 
     .confirm-title {

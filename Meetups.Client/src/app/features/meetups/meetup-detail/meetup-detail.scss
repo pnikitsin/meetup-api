@@ -211,7 +211,7 @@
 
 .detail-description {
   margin: 0;
-  color: #3f4658;
+  color: var(--app-ink-soft);
   font-size: 0.92rem;
   line-height: 1.7;
   white-space: pre-line;
@@ -228,9 +228,9 @@
   align-items: flex-start;
   gap: 0.65rem;
   padding: 0.75rem;
-  border: 1px solid #eef0f6;
+  border: 1px solid var(--app-divider);
   border-radius: 0.8rem;
-  background: #fbfbfe;
+  background: var(--app-subtle);
 
   strong,
   span {
@@ -252,10 +252,10 @@
   width: 2rem;
   height: 2rem;
   border-radius: 0.55rem;
-  background: #fff;
+  background: var(--app-elevated);
   color: var(--app-primary);
   font-size: 0.88rem;
-  box-shadow: 0 1px 3px rgba(20, 25, 43, 0.08);
+  box-shadow: var(--app-shadow-xs);
 }
 
 .detail-info__label {
@@ -287,10 +287,10 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.75rem;
-  background: #fff;
+  background: var(--app-elevated);
   color: var(--app-primary);
   font-size: 1.05rem;
-  box-shadow: 0 1px 3px rgba(20, 25, 43, 0.08);
+  box-shadow: var(--app-shadow-xs);
 }
 
 .countdown-panel__label,

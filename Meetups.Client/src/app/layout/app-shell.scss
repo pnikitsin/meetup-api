@@ -8,8 +8,8 @@
   position: sticky;
   z-index: 1030;
   top: 0;
-  border-bottom: 1px solid rgba(231, 233, 242, 0.9);
-  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid var(--app-header-border);
+  background: var(--app-header-bg);
   backdrop-filter: blur(16px);
 }
 
@@ -44,7 +44,7 @@
   }
 
   &:hover {
-    background: #f5f6fb;
+    background: var(--app-subtle-2);
     color: var(--app-ink);
   }
 
@@ -88,7 +88,7 @@
   &:hover,
   &[aria-expanded='true'] {
     border-color: var(--app-border);
-    background: #f8f9fd;
+    background: var(--app-subtle);
   }
 }
 
@@ -113,8 +113,8 @@
   padding: 0.5rem;
   border: 1px solid var(--app-border);
   border-radius: 0.95rem;
-  background: #fff;
-  box-shadow: 0 22px 50px -18px rgba(20, 25, 43, 0.3);
+  background: var(--app-elevated);
+  box-shadow: var(--app-shadow);
   animation: dropdown-in 0.18s ease both;
 }
 
@@ -144,7 +144,7 @@
   border: 0;
   border-radius: 0.55rem;
   background: transparent;
-  color: #3b4355;
+  color: var(--app-ink-soft);
   font-size: 0.85rem;
   font-weight: 600;
   text-align: left;
@@ -155,19 +155,19 @@
   }
 
   &:hover {
-    background: #f5f6fb;
+    background: var(--app-subtle-2);
     color: var(--app-ink);
   }
 
   &.is-danger {
-    color: #c72c3d;
+    color: var(--app-danger-ink);
 
     i {
-      color: #d65563;
+      color: var(--app-danger-ink);
     }
 
     &:hover {
-      background: #fff2f3;
+      background: var(--app-danger-soft);
     }
   }
 }
@@ -186,7 +186,7 @@
   height: 2.35rem;
   border: 1px solid var(--app-border);
   border-radius: 0.65rem;
-  background: #fff;
+  background: var(--app-elevated);
   color: var(--app-ink);
   font-size: 1.1rem;
 }
@@ -197,7 +197,7 @@
   gap: 0.35rem;
   padding: 0.75rem 1rem 1rem;
   border-top: 1px solid var(--app-border);
-  background: #fff;
+  background: var(--app-elevated);
   animation: dropdown-in 0.18s ease both;
 }
 
@@ -218,6 +218,13 @@
   }
 }
 
+.mobile-nav__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
 .app-main {
   flex: 1;
 }
@@ -225,7 +232,7 @@
 .app-footer {
   margin-top: auto;
   border-top: 1px solid var(--app-border);
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--app-footer-bg);
 }
 
 .footer-inner {
@@ -254,7 +261,8 @@
   width: 0.24rem;
   height: 0.24rem;
   border-radius: 50%;
-  background: #c7ccda;
+  background: var(--app-muted-2);
+  opacity: 0.7;
 }
 
 @keyframes dropdown-in {

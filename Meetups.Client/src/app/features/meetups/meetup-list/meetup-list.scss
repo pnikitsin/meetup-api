@@ -16,7 +16,7 @@
     z-index: 2;
     top: 50%;
     left: 0.85rem;
-    color: #9aa1b2;
+    color: var(--app-muted-2);
     font-size: 0.92rem;
     transform: translateY(-50%);
     pointer-events: none;
@@ -25,12 +25,12 @@
   .form-control {
     padding-right: 2.4rem;
     padding-left: 2.4rem;
-    border-color: #e7e9f2;
-    background: #f8f9fd;
+    border-color: var(--app-border);
+    background: var(--app-subtle);
     box-shadow: none;
 
     &:focus {
-      background: #fff;
+      background: var(--app-elevated);
     }
   }
 }
@@ -48,12 +48,12 @@
   border: 0;
   border-radius: 0.5rem;
   background: transparent;
-  color: #9aa1b2;
+  color: var(--app-muted-2);
   font-size: 0.75rem;
   transform: translateY(-50%);
 
   &:hover {
-    background: #eceef6;
+    background: var(--app-divider);
     color: var(--app-ink);
   }
 }
@@ -63,9 +63,9 @@
   flex-wrap: wrap;
   gap: 0.25rem;
   padding: 0.22rem;
-  border: 1px solid #e7e9f2;
+  border: 1px solid var(--app-border);
   border-radius: 0.75rem;
-  background: #f8f9fd;
+  background: var(--app-subtle);
 }
 
 .filter-chip {
@@ -93,8 +93,8 @@
     height: 1.2rem;
     padding-inline: 0.28rem;
     border-radius: 999px;
-    background: #eceef6;
-    color: #7b8497;
+    background: var(--app-divider);
+    color: var(--app-muted);
     font-size: 0.66rem;
     font-weight: 750;
   }
@@ -104,9 +104,9 @@
   }
 
   &.is-active {
-    background: #fff;
+    background: var(--app-selected);
     color: var(--app-primary-dark);
-    box-shadow: 0 1px 4px rgba(20, 25, 43, 0.08);
+    box-shadow: var(--app-shadow-xs);
 
     span {
       background: var(--app-primary-soft);
@@ -131,7 +131,7 @@
     position: absolute;
     z-index: 2;
     left: 0.7rem;
-    color: #9aa1b2;
+    color: var(--app-muted-2);
     font-size: 0.85rem;
     pointer-events: none;
   }
@@ -140,8 +140,8 @@
     width: auto;
     min-width: 11.5rem;
     padding-left: 2rem;
-    border-color: #e7e9f2;
-    background-color: #f8f9fd;
+    border-color: var(--app-border);
+    background-color: var(--app-subtle);
     font-size: 0.8rem;
     box-shadow: none;
   }
@@ -151,9 +151,9 @@
   display: inline-flex;
   gap: 0.15rem;
   padding: 0.2rem;
-  border: 1px solid #e7e9f2;
+  border: 1px solid var(--app-border);
   border-radius: 0.65rem;
-  background: #f8f9fd;
+  background: var(--app-subtle);
 }
 
 .view-toggle__btn {
@@ -165,7 +165,7 @@
   border: 0;
   border-radius: 0.45rem;
   background: transparent;
-  color: #9aa1b2;
+  color: var(--app-muted-2);
   font-size: 0.9rem;
 
   &:hover {
@@ -173,9 +173,9 @@
   }
 
   &.is-active {
-    background: #fff;
+    background: var(--app-selected);
     color: var(--app-primary);
-    box-shadow: 0 1px 4px rgba(20, 25, 43, 0.08);
+    box-shadow: var(--app-shadow-xs);
   }
 }
 
@@ -213,7 +213,7 @@
   padding: 1.1rem 1.15rem 1rem;
 
   &.is-past {
-    background: #fcfcfe;
+    background: var(--app-surface-muted);
   }
 }
 
@@ -289,7 +289,7 @@
 
   i {
     flex: 0 0 auto;
-    color: #a3aabc;
+    color: var(--app-icon);
     font-size: 0.82rem;
   }
 }
@@ -301,7 +301,7 @@
   gap: 0.5rem;
   margin-top: 0.95rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #f0f1f7;
+  border-top: 1px solid var(--app-divider);
 }
 
 .meetup-card__organizer {
@@ -341,7 +341,7 @@
   }
 
   &.is-past {
-    background: #fcfcfe;
+    background: var(--app-surface-muted);
   }
 }
 
@@ -384,7 +384,7 @@
   }
 
   i {
-    color: #a3aabc;
+    color: var(--app-icon);
   }
 }
 

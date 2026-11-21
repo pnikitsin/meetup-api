@@ -29,6 +29,10 @@ const ru = {
   'language.ru': 'Русский',
   'language.en': 'Английский',
 
+  // Theme switcher
+  'theme.toDark': 'Включить тёмную тему',
+  'theme.toLight': 'Включить светлую тему',
+
   // Navigation
   'nav.main': 'Основная навигация',
   'nav.mobile': 'Мобильная навигация',
@@ -396,6 +400,9 @@ const en: Record<TranslationKey, string> = {
   'language.label': 'Interface language',
   'language.ru': 'Russian',
   'language.en': 'English',
+
+  'theme.toDark': 'Switch to dark theme',
+  'theme.toLight': 'Switch to light theme',
 
   'nav.main': 'Main navigation',
   'nav.mobile': 'Mobile navigation',

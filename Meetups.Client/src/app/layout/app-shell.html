@@ -21,6 +21,7 @@
 
       <div class="header-actions">
         <app-language-switcher class="d-none d-sm-inline-flex" />
+        <app-theme-toggle class="d-none d-sm-inline-flex" />
 
         <a class="btn btn-primary btn-sm header-create d-none d-sm-inline-flex" routerLink="/meetups/new">
           <i class="bi bi-plus-lg"></i>
@@ -88,7 +89,10 @@
           <i class="bi bi-plus-lg"></i>
           {{ i18n.t('nav.newMeetup') }}
         </a>
-        <app-language-switcher class="d-sm-none" />
+        <div class="mobile-nav__tools d-sm-none">
+          <app-language-switcher />
+          <app-theme-toggle />
+        </div>
       </nav>
     }
   </header>

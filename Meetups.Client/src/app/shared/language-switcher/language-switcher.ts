@@ -40,7 +40,7 @@ interface LanguageOption {
       padding: 0.18rem;
       border: 1px solid var(--app-border);
       border-radius: 0.62rem;
-      background: #f8f9fd;
+      background: var(--app-subtle);
     }
 
     .language-switch__btn {
@@ -69,9 +69,9 @@ interface LanguageOption {
     }
 
     .language-switch__btn.is-active {
-      background: #fff;
+      background: var(--app-selected);
       color: var(--app-primary);
-      box-shadow: 0 1px 4px rgba(20, 25, 43, 0.1);
+      box-shadow: var(--app-shadow-xs);
     }
   `,
 })

@@ -7,12 +7,21 @@ import { I18n } from '../core/i18n/i18n';
 import { Avatar } from '../shared/avatar/avatar';
 import { Brand } from '../shared/brand/brand';
 import { LanguageSwitcher } from '../shared/language-switcher/language-switcher';
+import { ThemeToggle } from '../shared/theme-toggle/theme-toggle';
 import { Toasts } from '../shared/toast/toast';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Brand, Avatar, LanguageSwitcher],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    Brand,
+    Avatar,
+    LanguageSwitcher,
+    ThemeToggle,
+  ],
   templateUrl: './app-shell.html',
   styleUrl: './app-shell.scss',
   host: {
